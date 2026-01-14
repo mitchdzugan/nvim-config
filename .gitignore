@@ -1,0 +1,10 @@
+# Nix
+result*
+
+# Misc
+.direnv
+
+spec/**/*.lua
+
+/**/flsproject.fnl
+/.vscode/

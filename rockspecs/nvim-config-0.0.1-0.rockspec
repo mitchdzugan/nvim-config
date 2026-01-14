@@ -16,6 +16,6 @@ dependencies = {
 build = {
    type = "builtin",
    modules = {
-      __ = "dist/__.lua"
+      ["nvim-config"] = "dist/nvim-config.lua"
    }
 }
