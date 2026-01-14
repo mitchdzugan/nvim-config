@@ -1,7 +1,0 @@
-{"fennel-ls.fennel-path": "/tmp/tmp.KvGrcgahU9/project/src/?.fnl",
- "fennel-ls.macro-path": "/nix/store/gj18g4qvx505bz737a529ksq9616j6gw-macro-path/?.fnl;/tmp/tmp.KvGrcgahU9/project/macro-path/?.fnl;/nix/store/ch8cfcgbpv0kfrazf5x4gf2crqjzvj21-luajit2.1-__-0.0.1-0/macro-path/?.fnl;/nix/store/sbbkfmq2d8dg75mbpiw9wbwfjnzbsf36-luajit2.1-lua-color-1.2-5/macro-path/?.fnl;/nix/store/m7fy3dyz7xc8ckjfpnak0w21xxfxrmz9-luajit2.1-rapidjson-0.7.2-1/macro-path/?.fnl;/nix/store/mrysbhskm3w7iz1jd8500v146igdm94j-luajit2.1-busted-2.2.0-1/macro-path/?.fnl;/nix/store/4alf0m8h6wvvpjifas6cyqx3hzjrsxym-luajit2.1-fennel-1.6.0-1/macro-path/?.fnl",
- "fennel-ls.extra-globals": "it describe",
- "customLocalFormatters.formatters": [{
-   "command": "fnlfmt ${file}",
-   "languages": ["fennel"]
- }]}
