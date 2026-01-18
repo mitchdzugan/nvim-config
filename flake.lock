@@ -41,14 +41,17 @@
         "mitch-utils": "mitch-utils"
       },
       "locked": {
-        "lastModified": 1768360244,
-        "narHash": "sha256-8f3LHV9oHw4Bnpf3mjis6LzIZD8OXokXMGWov80M8+E=",
-        "path": "/VOID/proj/__.lua",
-        "type": "path"
+        "lastModified": 1768688553,
+        "narHash": "sha256-p68asRr/wk0INErc/RzQsnBhOHA1dyveU2e9EvaxhLI=",
+        "owner": "mitchdzugan",
+        "repo": "__.lua",
+        "rev": "681be05df213e1340be36be4b9923141540dd3b7",
+        "type": "github"
       },
       "original": {
-        "path": "/VOID/proj/__.lua",
-        "type": "path"
+        "owner": "mitchdzugan",
+        "repo": "__.lua",
+        "type": "github"
       }
     },
     "mitch-utils": {
@@ -57,14 +60,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1768360231,
-        "narHash": "sha256-odg/dXwHMOLMbcNZS954SzYyp3QlHkyGfoO8SK1yXgM=",
-        "path": "/VOID/proj/mitch-utils.nix",
-        "type": "path"
+        "lastModified": 1768687102,
+        "narHash": "sha256-dNRdOhOm+05BxBFsNXPdZs8sE46cKzkGym3NQY2za9g=",
+        "owner": "mitchdzugan",
+        "repo": "mitch-utils.nix",
+        "rev": "1149ce094a1de0ce10bd7d6db783c30e88c66501",
+        "type": "github"
       },
       "original": {
-        "path": "/VOID/proj/mitch-utils.nix",
-        "type": "path"
+        "owner": "mitchdzugan",
+        "repo": "mitch-utils.nix",
+        "type": "github"
       }
     },
     "mitch-utils_2": {
@@ -73,14 +79,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1768360399,
-        "narHash": "sha256-XKGycNLMQ1/jaUj5FzXWztIPEFNy/Ev5UZwIWegUdqM=",
-        "path": "/VOID/proj/mitch-utils.nix",
-        "type": "path"
+        "lastModified": 1768737491,
+        "narHash": "sha256-4bfBSzKnfTveAIQR1TaoSt4BTEGzcBhIKRjyGSBeUY8=",
+        "owner": "mitchdzugan",
+        "repo": "mitch-utils.nix",
+        "rev": "aca53110f1313e9a1d7e3b9a7a31dede421626fb",
+        "type": "github"
       },
       "original": {
-        "path": "/VOID/proj/mitch-utils.nix",
-        "type": "path"
+        "owner": "mitchdzugan",
+        "repo": "mitch-utils.nix",
+        "type": "github"
       }
     },
     "nixpkgs": {
