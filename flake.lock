@@ -41,17 +41,14 @@
         "mitch-utils": "mitch-utils"
       },
       "locked": {
-        "lastModified": 1768921174,
-        "narHash": "sha256-3fwhdN0EDH4rbobKLcS9Fc3nPLSQrspO7uHHpJeGWio=",
-        "owner": "mitchdzugan",
-        "repo": "__.lua",
-        "rev": "62ca76ce5208ecc1a3284a76702b699604616d6f",
-        "type": "github"
+        "lastModified": 1768936539,
+        "narHash": "sha256-x0PwMjaPkGsC5yFZtyf+0JeX4aSDgLIBNft/WhmeU+U=",
+        "path": "/VOID/proj/__.lua",
+        "type": "path"
       },
       "original": {
-        "owner": "mitchdzugan",
-        "repo": "__.lua",
-        "type": "github"
+        "path": "/VOID/proj/__.lua",
+        "type": "path"
       }
     },
     "mitch-utils": {
@@ -60,11 +57,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1768773183,
-        "narHash": "sha256-/OE1KroJUsgtXVAYOehL9Q0ISLSutjDlyM80HT56Aqo=",
+        "lastModified": 1768936531,
+        "narHash": "sha256-PkF1YAH7pwpvU6AxYEKmovE31JSi/+fNqgfrpF2hjqg=",
         "owner": "mitchdzugan",
         "repo": "mitch-utils.nix",
-        "rev": "4e5692d69f1c9f8e36a07441b91177a2317facea",
+        "rev": "943d9cc23b48ec0a4aa97f0b5ccbe42bc95f0bb5",
         "type": "github"
       },
       "original": {
@@ -79,17 +76,14 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1768773183,
-        "narHash": "sha256-/OE1KroJUsgtXVAYOehL9Q0ISLSutjDlyM80HT56Aqo=",
-        "owner": "mitchdzugan",
-        "repo": "mitch-utils.nix",
-        "rev": "4e5692d69f1c9f8e36a07441b91177a2317facea",
-        "type": "github"
+        "lastModified": 1768940014,
+        "narHash": "sha256-IzBOK7WW/n0wlu2ySxTrTmXTFXZ+DVtsS1Dj0Z2pT30=",
+        "path": "/VOID/proj/mitch-utils.nix",
+        "type": "path"
       },
       "original": {
-        "owner": "mitchdzugan",
-        "repo": "mitch-utils.nix",
-        "type": "github"
+        "path": "/VOID/proj/mitch-utils.nix",
+        "type": "path"
       }
     },
     "nixpkgs": {
