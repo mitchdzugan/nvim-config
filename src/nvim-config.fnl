@@ -1,5 +1,7 @@
 (import-macros _ :__)
 
+(fn hl [...] (vim.api.nvim_set_hl 0 ...))
+
 (_.R Color :lua-color)
 (_.R snacks)
 (_.R paredit :nvim-paredit)
@@ -11,11 +13,13 @@
 
 (fn bg-color []
   (let [hl-normal (vim.api.nvim_get_hl_by_name :Normal true)
-        bg-decimal (. hl-normal :background)]
+        __ (dbg {: hl-normal})
+        bg-decimal (or (. hl-normal :background) 0)]
     (Color (string.format "#%06x" bg-decimal))))
 
-(fn bounder [_l _h]
-  (let [l (math.min _l _h)
+(fn bounder [_l __h]
+  (let [_h (if (_.nil? __h) (- 1 _l) __h)
+        l (math.min _l _h)
         h (math.max _l _h)]
     #(math.max l (math.min $1 h))))
 
@@ -202,6 +206,83 @@
 
 (fn add-colorschemes []
   (->> (fn []
+         (set vim.g.aurora_italic 1)
+         (set vim.g.aurora_transparent 0)
+         (set vim.g.aurora_bold 1)
+         (set vim.g.aurora_darker 0)
+         (require :aurora)
+         (vim.cmd.colorscheme :aurora))
+       (add-colorscheme :aurora))
+  (->> (fn []
+         (set vim.o.background :light)
+         (vim.cmd.colorscheme :rose-pine-dawn))
+       (add-colorscheme :rose-pine-dawn))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :rose-pine-moon))
+       (add-colorscheme :rose-pine-moon))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :rose-pine-main))
+       (add-colorscheme :rose-pine-main))
+  (->> (fn []
+         (set vim.o.background :light)
+         (vim.cmd.colorscheme :melange))
+       (add-colorscheme :melange-light))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :melange))
+       (add-colorscheme :melange-dark))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :kanagawa-wave))
+       (add-colorscheme :kanagawa-wave))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :kanagawa-dragon))
+       (add-colorscheme :kanagawa-dragon))
+  (->> (fn []
+         (set vim.o.background :light)
+         (vim.cmd.colorscheme :kanagawa-lotus))
+       (add-colorscheme :kanagawa-lotus))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :dracula))
+       (add-colorscheme :dracula))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :dracula-soft))
+       (add-colorscheme :dracula-soft))
+  (->> (fn []
+         (set vim.o.background :light)
+         (vim.cmd.colorscheme :catppuccin-latte))
+       (add-colorscheme :catppuccin-latte))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :catppuccin-frappe))
+       (add-colorscheme :catppuccin-frappe))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :catppuccin-macchiato))
+       (add-colorscheme :catppuccin-macchiato))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :catppuccin-mocha))
+       (add-colorscheme :catppuccin-mocha))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (vim.cmd.colorscheme :aylin)
+         (hl :ColorColumn {:bg (tostring (Color {:h 0.8 :s 0.3 :v 0.25}))}))
+       (add-colorscheme :aylin))
+  (->> (fn []
+         (set vim.o.background :dark)
+         (setup-plugin :monet {})
+         (vim.cmd.colorscheme :monet))
+       (add-colorscheme :monet))
+  (->> (fn []
+         (vim.cmd.colorscheme :oldworld))
+       (add-colorscheme :oldworld))
+  (->> (fn []
          (setup-plugin :tokyodark)
          (vim.cmd.colorscheme :tokyodark))
        (add-colorscheme :tokyodark))
@@ -210,6 +291,10 @@
                        {:glow true :transparent false :theme :delta})
          (vim.cmd.colorscheme :fluoromachine))
        (add-colorscheme :fluoromachine))
+  (add-colorscheme :moonfly
+                   (fn []
+                     (set vim.o.background :dark)
+                     (vim.cmd.colorscheme :moonfly)))
   (add-neomodern-colorscheme :gyokuro :light)
   (add-neomodern-colorscheme :gyokuro :dark)
   (add-neomodern-colorscheme :hojicha :dark)
@@ -223,9 +308,6 @@
 
 (fn on-colorscheme []
   (reset-theme)
-
-  (fn hl [...] (vim.api.nvim_set_hl 0 ...))
-
   (comment "         gitsigns                          ")
   (hl :GitSignsAdd {:fg (Thm.faint-fg-of :green)})
   (hl :GitSignsChange {:fg (Thm.faint-fg-of :cyan)})
@@ -255,6 +337,27 @@
   (comment "                                           ")
   (comment "                                           ")
   (comment "                                           ")
+  (comment "                                           ")
+  (comment "                                           ")
+  (comment "                                           ")
+  (comment "            snacks                         ")
+
+  (fn org-hl [name] {:fg (Thm.strong-fg-of name) :bg (Thm.faint-bg-of name)})
+
+  (hl "SnacksIndent1" (org-hl :orange))
+  (hl "SnacksIndent2" (org-hl :lime))
+  (hl "SnacksIndent3" (org-hl :blue))
+  (hl "SnacksIndent4" (org-hl :yellow))
+  (hl "SnacksIndent5" (org-hl :cyan))
+  (hl "SnacksIndent6" (org-hl :amber))
+  (hl "SnacksIndent7" (org-hl :purple))
+  (hl "SnacksIndent8" (org-hl :green))
+  (comment "                                           ")
+  (comment "                                           ")
+  (comment "                                           ")
+  (comment "                                           ")
+  (comment "                                           ")
+  (comment "                                           ")
   (comment "         rainbow delim                     ")
 
   (fn rnbw-fg [name] (Thm.sat-fg-of name))
@@ -266,9 +369,15 @@
   (hl :RainbowDelimiterCyan {:fg (rnbw-fg :yellow)})
   (hl :RainbowDelimiterRed {:fg (rnbw-fg :purple)})
   (hl :RainbowDelimiterYellow {:fg (rnbw-fg :red)})
-  (hl :Cursor {:bg (Thm.strong-fg-of :magenta) :fg (Thm.faint-bg-of :magenta)})
-  (hl :MatchParen {:bg (Thm.strong-fg-of :lime)
-                   :fg (Thm.faint-bg-of :lime)
+  (hl :Cursor {:bg (-> (Thm.strong-fg-of :amber)
+                       (Color)
+                       (tostring))})
+  (hl :MatchParen {:fg (Thm.strong-fg-of :amber)
+                   :bg (-> (Thm.faint-bg-of :amber)
+                           (Color)
+                           (_s# (bounder 0.8 1.0))
+                           (_v# (bounder 0.4))
+                           (tostring))
                    :bold true})
   (comment "                                           ")
   (comment "                                           ")
@@ -291,7 +400,6 @@
                  #(set-colorscheme $1)))
 
 (fn setup-vim-opts []
-  (comment) ; TODO figure out saving position in file
   (comment) ; enable filetype based features
   (vim.cmd "filetype plugin indent on")
   (vim.cmd "syntax on")
@@ -335,14 +443,7 @@
   (set vim.opt.colorcolumn "80"))
 
 (fn setup-gitsigns []
-  (let [newchar "༴"
-        newchar "᎙"
-        newchar "᭩"
-        newchar "🮖"
-        newchar "🮘"
-        newchar "▒"
-        newchar "🭬"
-        newchar "𜸮"
+  (let [newchar "𜸮"
         signchars {:delete {:text "˯"}
                    :top-delete {:text "˄"}
                    :change-delete {:text "↜"}
@@ -379,7 +480,18 @@
 (fn launch-best-repl []
   (snacks.terminal "fennel"))
 
+(fn km [in-title ...]
+  (let [title (.. in-title "       ␛ to return to buffer")
+        keys (icollect [__ [key desc action icon] (ipairs [...])]
+               {: key : desc : action : icon})]
+    (snacks.dashboard {:preset {: keys} :sections [{:section :keys : title}]})))
+
 (fn setup-keymap []
+  (ksetm "<A-q>"
+         #(km "main menu"
+              [:v
+               "edit vim config"
+               (.. "e " (os.getenv :DZ_NVIM_CONFIG_CHECKOUT_PATH))]))
   (ksetm "<A-->" ":b#<CR>")
   (ksetm "<A-r>" ":DzReload<CR>")
   (ksetm "<A-l>" #(launch-best-repl))
@@ -397,8 +509,8 @@
   (ksetm "<A-x>" #(paredit.api.delete_element))
   (ksetm "<A-9>" #(paredit.api.slurp_backwards))
   (ksetm "<A-0>" #(paredit.api.slurp_forwards))
-  (ksetm "<A-,>" #(paredit.api.barf_backwards))
-  (ksetm "<A-.>" #(paredit.api.barf_forwards)))
+  (ksetm "<A-,>" #(paredit.api.barf_forwards))
+  (ksetm "<A-.>" #(paredit.api.barf_backwards)))
 
 (fn setup-paredit []
   (setup-plugin :nvim-paredit {:use_default_keys true :indent {:enabled true}}))
@@ -578,6 +690,7 @@
        (setup-plugin :snacks)))
 
 (_.L aucmd #(vim.api.nvim_create_autocmd $...))
+(_.L ucmd #(vim.api.nvim_create_user_command $...))
 
 (fn setup-treesitter []
   (setup-plugin :nvim-treesitter.config
@@ -635,52 +748,50 @@
                                       :selene.yml
                                       :.git]}))
 
-(fn setup-conform []
-  (setup-plugin :conform
-                {:format_on_save true :formatters_by_ft {:fennel [:fnlfmt]}}))
+(_.R submod)
+(_.R fennel)
+
+(macro expl [& body]
+  `(do
+     ,body))
 
 (_.M$
+  (fn $1.setup-conform []
+    (-- (_.R$ conform) :setup
+        {:format_on_save true :formatters_by_ft {:fennel [:fnlfmt]}}))
   (fn $1.setup-ibl []
     (fn hl [name] {:fg (Thm.faint-fg-of name)})
 
     (fn set-hl []
       (doto vim.api
-        (-- :nvim_set_hl 0 :temp_ibl_dz1 (hl :cyan))
-        (-- :nvim_set_hl 0 :temp_ibl_dz2 (hl :amber))
-        (-- :nvim_set_hl 0 :temp_ibl_dz3 (hl :magenta))
-        (-- :nvim_set_hl 0 :temp_ibl_dz4 (hl :green))
-        (-- :nvim_set_hl 0 :temp_ibl_dz5 (hl :orange))
-        (-- :nvim_set_hl 0 :temp_ibl_dz6 (hl :indigo))
-        (-- :nvim_set_hl 0 :temp_ibl_dz7 (hl :lime))
-        (-- :nvim_set_hl 0 :temp_ibl_dz8 (hl :red))))
+        (-- :nvim_set_hl 0 :iblz1 (hl :cyan))
+        (-- :nvim_set_hl 0 :iblz2 (hl :amber))
+        (-- :nvim_set_hl 0 :iblz3 (hl :magenta))
+        (-- :nvim_set_hl 0 :iblz4 (hl :green))
+        (-- :nvim_set_hl 0 :iblz5 (hl :orange))
+        (-- :nvim_set_hl 0 :iblz6 (hl :indigo))
+        (-- :nvim_set_hl 0 :iblz7 (hl :lime))
+        (-- :nvim_set_hl 0 :iblz8 (hl :red))))
 
     (_.R$ hooks :ibl.hooks)
     ($1.hooks.register $1.hooks.type.HIGHLIGHT_SETUP set-hl)
     (set-hl)
     (_.R$ ibl)
-    (_.L hl-list [:temp_ibl_dz1
-                  :temp_ibl_dz2
-                  :temp_ibl_dz3
-                  :temp_ibl_dz4
-                  :temp_ibl_dz5
-                  :temp_ibl_dz6
-                  :temp_ibl_dz7
-                  :temp_ibl_dz8])
+    (_.L hl-list [:iblz1 :iblz2 :iblz3 :iblz4 :iblz5 :iblz6 :iblz7 :iblz8])
     ($1.ibl.setup {:indent {:char "" :highlight hl-list}
                    :whitespace {:highlight hl-list
                                 :remove_blankline_trail true}
                    :exclude {:filetypes [:org]}}))
+
   (fn $1.exports.doTheThings []
     (setup-vim-opts)
-    (vim.api.nvim_create_user_command "DzColorscheme"
-                                      (fn [] (pick-colorscheme)) {:nargs 0})
-    (vim.api.nvim_create_user_command "DzReload"
-                                      (fn [...]
-                                        (let [fennel (require :fennel)]
-                                          (-- (fennel.dofile "/home/dz/Projects/nvim-config/src/nvim-config.fnl")
-                                              :doTheThings)))
-                                      {:nargs 0})
-    (_.R$ submod)
+    (ucmd "DzColorscheme" (fn [] (pick-colorscheme)) {:nargs 0})
+    (ucmd "DzReload"
+          (fn [...]
+            (let [fennel (require :fennel)
+                  rootdir (os.getenv :DZ_NVIM_CONFIG_CHECKOUT_PATH)
+                  src (.. rootdir "/src/nvim-config.fnl")]
+              (-- (fennel.dofile src) :doTheThings))) {:nargs 0})
     (setup-treesitter)
     (setup-lsp)
     (setup-gitsigns)
@@ -692,21 +803,16 @@
     (setup-lualine)
     (setup-tidy)
     (setup-snacks)
-    (setup-conform)
+    ($1.setup-conform)
     (add-colorschemes)
-    (set-colorscheme :fluoromachine)
+    (set-colorscheme :aurora)
     ($1.setup-ibl)
     (vim.api.nvim_clear_autocmds {:group :gitsigns :event [:ColorScheme]})
-    (vim.api.nvim_create_autocmd :ColorScheme {:callback on-colorscheme})
-    (vim.api.nvim_create_autocmd :BufLeave
-                                 {:pattern "*.org"
-                                  :callback #(vim.cmd "set list")})
-    (vim.api.nvim_create_autocmd :BufEnter
-                                 {:pattern "*.org"
-                                  :callback #(vim.cmd "set nolist")})
-    (vim.api.nvim_create_autocmd :BufLeave
-                                 {:pattern "*.org"
-                                  :callback #(snacks.indent.enable)})
+    (aucmd :ColorScheme {:callback on-colorscheme})
+    (aucmd :BufLeave {:pattern "*.org" :callback #(vim.cmd "set list")})
+    (aucmd :BufEnter {:pattern "*.org" :callback #(vim.cmd "set nolist")})
+    (aucmd :BufLeave {:pattern "*.org" :callback #(snacks.indent.enable)})
+    (aucmd :BufEnter {:pattern "*.org" :callback #(snacks.indent.disable)})
     (->> {:group (vim.api.nvim_create_augroup :LastPlace {:clear true})
           :pattern ["*"]
           :callback #(let [mark (vim.api.nvim_buf_get_mark 0 "\"")
@@ -714,8 +820,5 @@
                        (when (and (> (. mark 1) 0) (<= (. mark 1) lcount))
                          (pcall vim.api.nvim_win_set_cursor 0 mark)))}
          (vim.api.nvim_create_autocmd :BufReadPost))
-    (vim.api.nvim_create_autocmd :BufEnter
-                                 {:pattern "*.org"
-                                  :callback #(snacks.indent.disable)})
     (when vim.g.neovide (setup-neovide))
     (setup-keymap)))
