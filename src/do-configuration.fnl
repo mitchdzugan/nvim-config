@@ -1,11 +1,13 @@
 (import-macros _ :__)
+
 (_.module
  (fn hl [...] (vim.api.nvim_set_hl 0 ...))
- (_.R Color :lua-color)
- (_.R snacks)
- (_.R paredit :nvim-paredit)
-
- (fn dbg [...] (snacks.debug.inspect ...))
+ (import NColor :Color)
+ (import | :utils)
+ (import Color :lua-color)
+ (import snacks)
+ (import paredit :nvim-paredit)
+ (|.dbg NColor)
 
  (fn setup-plugin [require-path ...]
    ((. (require require-path) :setup) ...))
@@ -126,14 +128,14 @@
          (_v# (limr l))
          (_s# (limr 0.45)))))
 
- (fn to-bg [col r _l]
-   (let [l (or _l 0.05)
-         (h s v) (col:hsv)]
-     (-> (hsv h s (if (> v 0.5)
-                      (+ v r)
-                      (- v r)))
-         (_v# (limr l))
-         (_s# (limr 0.15)))))
+ (comment (fn to-bg [col r _l]
+            (let [l (or _l 0.05)
+                  (h s v) (col:hsv)]
+              (-> (hsv h s (if (> v 0.5)
+                               (+ v r)
+                               (- v r)))
+                  (_v# (limr l))
+                  (_s# (limr 0.15))))))
 
  (fn to-ff [col r _l]
    (let [l (or _l 0.05)
@@ -301,8 +303,6 @@
    (add-neomodern-colorscheme :roseprime :light)
    (add-neomodern-colorscheme :roseprime :dark))
 
- (fn -- [tbl fn-prop ...] ((. tbl fn-prop) ...))
-
  (fn on-colorscheme []
    (reset-theme)
    (comment "         gitsigns                          ")
@@ -394,9 +394,14 @@
    (when (. colorschemes name)
      (_set-colorscheme name)))
 
+ (fn sorted-colorschemes []
+   (let [res (icollect [name (pairs colorschemes)] name)]
+     (|.dbg res)
+     (table.sort res)
+     res))
+
  (fn pick-colorscheme []
-   (vim.ui.select (icollect [name (pairs colorschemes)] name) {}
-                  #(set-colorscheme $1)))
+   (vim.ui.select (sorted-colorschemes) {} #(set-colorscheme $1)))
 
  (fn setup-vim-opts []
    (comment) ; enable filetype based features
@@ -452,11 +457,11 @@
      (->> {:signs signchars :signs_staged signchars}
           (setup-plugin :gitsigns))))
 
- (_.R cmp)
+ (import cmp)
 
  (fn setup-completion []
    (comment "did not like blink" (setup-plugin :blink.cmp))
-   (-> {:snippet {:expand #(-- vim.fn "vsnip#anonymous" $1.body)}
+   (-> {:snippet {:expand #(_.|| vim.fn "vsnip#anonymous" & $1.body)}
         :window {}
         :mapping (-> {"<C-b>" (cmp.mapping.scroll_docs -4)
                       "<C-f>" (cmp.mapping.scroll_docs 4)
@@ -474,43 +479,58 @@
  (fn kset [modes lhs rhs opts]
    (vim.keymap.set modes lhs rhs (_.assign {:noremap true} (or opts {}))))
 
- (loc ksetm #(kset [:n :v] $...))
- ;; TODO look for nrepl/project files etc. etc.
-
  (fn launch-best-repl []
    (snacks.terminal "fennel"))
 
- (fn km [in-title ...]
-   (let [title (.. in-title "       ␛ to return to buffer")
-         keys (icollect [__ [key desc action icon] (ipairs [...])]
-                {: key : desc : action : icon})]
-     (snacks.dashboard {:preset {: keys} :sections [{:section :keys : title}]})))
-
  (fn setup-keymap []
-   (ksetm "<A-q>"
-          #(km "main menu"
-               [:v
-                "edit vim config"
-                (.. "e " (os.getenv :DZ_NVIM_CONFIG_CHECKOUT_PATH))]))
-   (ksetm "<A-->" ":b#<CR>")
-   (ksetm "<A-r>" ":DzReload<CR>")
-   (ksetm "<A-l>" #(launch-best-repl))
-   (ksetm "<A-b>" #(snacks.picker.buffers))
-   (ksetm "<A-g>" #(snacks.picker.grep))
-   (ksetm "<A-f>" #(snacks.picker.files))
-   (ksetm "<A-a>" #(snacks.picker.lines))
-   (ksetm "<A-c>" #(snacks.picker.grep_word))
-   (ksetm "<A-e>" #(snacks.picker.diagnostics_buffer))
-   (ksetm "<CA-Left>" #(paredit.api.drag_element_backwards))
-   (ksetm "<CA-Right>" #(paredit.api.drag_element_forwards))
-   (ksetm "<A-Left>" #(paredit.api.drag_form_backwards))
-   (ksetm "<A-Right>" #(paredit.api.drag_form_forwards))
-   (ksetm "<A-d>" #(paredit.api.delete_form))
-   (ksetm "<A-x>" #(paredit.api.delete_element))
-   (ksetm "<A-9>" #(paredit.api.slurp_backwards))
-   (ksetm "<A-0>" #(paredit.api.slurp_forwards))
-   (ksetm "<A-,>" #(paredit.api.barf_forwards))
-   (ksetm "<A-.>" #(paredit.api.barf_backwards)))
+   (|.ksetm "<A-q>"
+            #(|.km "main menu" [:c "set colorscheme" #(pick-colorscheme)]
+                   [:v
+                    "edit vim config"
+                    (.. "e " (os.getenv :DZ_NVIM_CONFIG_CHECKOUT_PATH))]))
+   (|.ksetn "<AS-CR>" #(do
+                         (paredit.api.move_to_parent_form_end)
+                         (vim.api.nvim_input "i<CR>")))
+   (|.ksetn "<S-CR>"
+            #(do
+               (paredit.api.move_to_next_element_tail)
+               (vim.api.nvim_input "a<CR><Space><Left>")))
+   (|.ksetn "<A-CR>"
+            #(do
+               (paredit.api.move_to_parent_form_end)
+               (vim.api.nvim_input "a<CR><Space><Left>")))
+   (|.ksetm "<A-->" ":b#<CR>")
+   (|.ksetm "<A-r>" ":DzReload<CR>")
+   (|.ksetm "<A-l>" #(launch-best-repl))
+   (|.ksetm "<A-b>" #(snacks.picker.buffers))
+   (|.ksetm "<A-g>" #(snacks.picker.grep))
+   (|.ksetm "<A-f>" #(snacks.picker.files))
+   (|.ksetm "<A-a>" #(snacks.picker.lines))
+   (|.ksetm "<A-c>" #(snacks.picker.grep_word))
+   (|.ksetm "<A-e>" #(snacks.picker.diagnostics_buffer))
+   (|.ksetm "<CA-Left>" #(paredit.api.drag_element_backwards))
+   (|.ksetm "<CA-Right>" #(paredit.api.drag_element_forwards))
+   (|.ksetm "<A-Left>" #(paredit.api.drag_form_backwards))
+   (|.ksetm "<A-Right>" #(paredit.api.drag_form_forwards))
+   (|.ksetm "<C-Left>"
+            #(|.til-moved!! #(paredit.api.move_to_prev_element_head)
+                            #(do
+                               (|.pcursor!)
+                               (while (and (|.form-boundary?) (|.pcursor!)))
+                               (paredit.api.move_to_prev_element_head))))
+   (|.ksetm "<C-Right>"
+            #(if (|.form-boundary?)
+                 (while (and (|.form-boundary?) (|.ncursor!)))
+                 (|.til-moved!! #(paredit.api.move_to_next_element_head)
+                                #(do
+                                   (|.ncursor!)
+                                   (while (and (|.form-end?) (|.ncursor!)))))))
+   (|.ksetm "<A-d>" #(paredit.api.delete_form))
+   (|.ksetm "<A-x>" #(paredit.api.delete_element))
+   (|.ksetm "<A-9>" #(paredit.api.slurp_backwards))
+   (|.ksetm "<A-0>" #(paredit.api.slurp_forwards))
+   (|.ksetm "<A-,>" #(paredit.api.barf_forwards))
+   (|.ksetm "<A-.>" #(paredit.api.barf_backwards)))
 
  (fn setup-paredit []
    (setup-plugin :nvim-paredit {:use_default_keys true :indent {:enabled true}}))
@@ -543,7 +563,7 @@
                                     {:silent true :buffer true})}
         (vim.api.nvim_create_autocmd :FileType)))
 
- (_.R rainbow-delimiters)
+ (import rainbow-delimiters)
 
  (fn setup-rainbow-delimiters []
    (setup-plugin :rainbow-delimiters.setup
@@ -749,28 +769,27 @@
                                        :selene.yml
                                        :.git]}))
 
- (_.R fennel)
- (_.R conform)
+ (import conform)
 
  (fn setup-conform []
    (conform.setup {:format_on_save true :formatters_by_ft {:fennel [:fnlfmt]}}))
 
- (_.R hooks :ibl.hooks)
- (_.R ibl)
+ (import hooks :ibl.hooks)
+ (import ibl)
 
  (fn setup-ibl []
    (fn hl [name] {:fg (Thm.faint-fg-of name)})
 
    (fn set-hl []
      (doto vim.api
-       (-- :nvim_set_hl 0 :iblz1 (hl :cyan))
-       (-- :nvim_set_hl 0 :iblz2 (hl :amber))
-       (-- :nvim_set_hl 0 :iblz3 (hl :magenta))
-       (-- :nvim_set_hl 0 :iblz4 (hl :green))
-       (-- :nvim_set_hl 0 :iblz5 (hl :orange))
-       (-- :nvim_set_hl 0 :iblz6 (hl :indigo))
-       (-- :nvim_set_hl 0 :iblz7 (hl :lime))
-       (-- :nvim_set_hl 0 :iblz8 (hl :red))))
+       (_.|| :nvim_set_hl & 0 :iblz1 (hl :cyan))
+       (_.|| :nvim_set_hl & 0 :iblz2 (hl :amber))
+       (_.|| :nvim_set_hl & 0 :iblz3 (hl :magenta))
+       (_.|| :nvim_set_hl & 0 :iblz4 (hl :green))
+       (_.|| :nvim_set_hl & 0 :iblz5 (hl :orange))
+       (_.|| :nvim_set_hl & 0 :iblz6 (hl :indigo))
+       (_.|| :nvim_set_hl & 0 :iblz7 (hl :lime))
+       (_.|| :nvim_set_hl & 0 :iblz8 (hl :red))))
 
    (hooks.register hooks.type.HIGHLIGHT_SETUP set-hl)
    (set-hl)
@@ -779,18 +798,13 @@
                :whitespace {:highlight hl-list :remove_blankline_trail true}
                :exclude {:filetypes [:org]}}))
 
- (fn pub.do-configuration []
+ (fn do-configuration []
    (setup-vim-opts)
    (ucmd "DzColorscheme" (fn [] (pick-colorscheme)) {:nargs 0})
    (ucmd "DzReload"
          (fn [...]
-           (_.reload-modules!)
-           (do-configuration)
-           (comment (let [fennel (require :fennel)
-                          rootdir (os.getenv :DZ_NVIM_CONFIG_CHECKOUT_PATH)
-                          src (.. rootdir "/src/nvim-config.fnl")]
-                      (-- (fennel.dofile src) :doTheThings))))
-         {:nargs 0})
+           (comment (_.reload-modules!))
+           (_.|| (require :nvim-config) :doTheThings)) {:nargs 0})
    (setup-treesitter)
    (setup-lsp)
    (setup-gitsigns)
@@ -804,7 +818,7 @@
    (setup-snacks)
    (setup-conform)
    (add-colorschemes)
-   (set-colorscheme :aurora)
+   (set-colorscheme :fluoromachine)
    (setup-ibl)
    (vim.api.nvim_clear_autocmds {:group :gitsigns :event [:ColorScheme]})
    (aucmd :ColorScheme {:callback on-colorscheme})
@@ -820,4 +834,6 @@
                         (pcall vim.api.nvim_win_set_cursor 0 mark)))}
         (vim.api.nvim_create_autocmd :BufReadPost))
    (when vim.g.neovide (setup-neovide))
-   (setup-keymap)))
+   (setup-keymap))
+
+ (exp do-configuration))
