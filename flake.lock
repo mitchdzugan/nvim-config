@@ -41,11 +41,11 @@
         "mitch-utils": "mitch-utils"
       },
       "locked": {
-        "lastModified": 1769213621,
-        "narHash": "sha256-km+fXHDFOrP0hsaVhQcCSgyvALMCRP/WhsHEvoHAzSc=",
+        "lastModified": 1769286117,
+        "narHash": "sha256-WMhBoZc+QD+ylOqAiHYQ/+T2Ue3kH8VHblr4In/wkhc=",
         "owner": "mitchdzugan",
         "repo": "__.lua",
-        "rev": "e13218540c9b43f3861edeb38059a8147d9fb1b1",
+        "rev": "61ed794317be26ffa66eca5e0d1ce9d0da70c5f2",
         "type": "github"
       },
       "original": {
