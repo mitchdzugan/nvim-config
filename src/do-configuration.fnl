@@ -117,7 +117,7 @@
                       (- v r)
                       (+ v r)))
          (_v# (limr l))
-         (_s# (limr 0.15)))))
+         (_s# (limr 0.25)))))
 
  (fn to-sat-fg [col r _l]
    (let [l (or _l 0.05)
@@ -187,7 +187,7 @@
      (tostring (_h! (to-ff Thm.bg 0.1) (h-of name))))
 
    (fn Thm.faint-fg-of [name]
-     (tostring (_h! (to-fg Thm.bg 0.4) (h-of name)))))
+     (tostring (_h! (to-fg Thm.bg 0.2) (h-of name)))))
 
  (loc mkcolorscheme #{:_type :colorscheme :name $1 :setup $2})
  (loc colorschemes {})
@@ -291,9 +291,9 @@
           (vim.cmd.colorscheme :fluoromachine))
         (add-colorscheme :fluoromachine))
    (add-colorscheme :moonfly
-                    (fn []
-                      (set vim.o.background :dark)
-                      (vim.cmd.colorscheme :moonfly)))
+     (fn []
+       (set vim.o.background :dark)
+       (vim.cmd.colorscheme :moonfly)))
    (add-neomodern-colorscheme :gyokuro :light)
    (add-neomodern-colorscheme :gyokuro :dark)
    (add-neomodern-colorscheme :hojicha :dark)
@@ -444,7 +444,7 @@
    (comment) ; guicursor")
    (vim.cmd "set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175")
    (comment) ; long line indicator
-   (set vim.opt.colorcolumn "80"))
+   (set vim.opt.colorcolumn "81"))
 
  (fn setup-gitsigns []
    (let [newchar "𜸮"
@@ -538,7 +538,9 @@
    (|.ksetm "<A-9>" #(paredit.api.slurp_backwards))
    (|.ksetm "<A-0>" #(paredit.api.slurp_forwards))
    (|.ksetm "<A-,>" #(paredit.api.barf_forwards))
-   (|.ksetm "<A-.>" #(paredit.api.barf_backwards)))
+   (|.ksetm "<A-.>" #(paredit.api.barf_backwards))
+   (|.ksetm "<Down>" "gj")
+   (|.ksetm "<Up>" "gk"))
 
  (fn setup-paredit []
    (setup-plugin :nvim-paredit {:use_default_keys true :indent {:enabled true}}))
@@ -726,20 +728,36 @@
                  {:incremental_selection {:enable true}
                   :indent {:enable true}
                   :fold {:enable true}})
-   (_.L ts-enabled
-        {:hl [:fennel :rust :javascript :typescript :lua :org]
-         :fold [:fennel :rust :javascript :typescript :lua :org]
-         :indent [:rust :javascript :typescript :lua]})
-   (aucmd :FileType {:pattern ts-enabled.hl :callback #(vim.treesitter.start)})
+   (_.L ts-enabled {:hl [:fennel
+                         :rust
+                         :javascript
+                         :javascriptreact
+                         :typescript
+                         :lua
+                         :org]
+                    :fold [:fennel
+                           :rust
+                           :javascript
+                           :javascriptreact
+                           :typescript
+                           :lua
+                           :org]
+                    :indent [:rust
+                             :javascript
+                             :javascriptreact
+                             :typescript
+                             :lua]})
    (aucmd :FileType
-          {:pattern ts-enabled.fold
-           :callback #(let [winopts (. vim.wo 0 0)]
-                        (set winopts.foldexpr "v:lua.vim.treesitter.foldexpr()")
-                        (set winopts.foldmethod :expr))})
+     {:pattern ts-enabled.hl :callback #(vim.treesitter.start)})
    (aucmd :FileType
-          {:pattern ts-enabled.indent
-           :callback #(set vim.bo.indentexpr
-                           "v:lua.require'nvim-treesitter'.indentexpr()")}))
+     {:pattern ts-enabled.fold
+      :callback #(let [winopts (. vim.wo 0 0)]
+                   (set winopts.foldexpr "v:lua.vim.treesitter.foldexpr()")
+                   (set winopts.foldmethod :expr))})
+   (aucmd :FileType
+     {:pattern ts-enabled.indent
+      :callback #(set vim.bo.indentexpr
+                      "v:lua.require'nvim-treesitter'.indentexpr()")}))
 
  (fn setup-lsp []
    (fn lsp-enable [lsp-name cfg]
@@ -806,6 +824,16 @@
                :whitespace {:highlight hl-list :remove_blankline_trail true}
                :exclude {:filetypes [:org]}}))
 
+ (loc LINE_WRAPPERS {:org true})
+
+ (fn buf-enter []
+   (let [wrapper? (= true (. LINE_WRAPPERS vim.bo.filetype))]
+     (set vim.wo.wrap wrapper?)
+     (set vim.wo.linebreak wrapper?)))
+
+ (fn setup-autotag []
+   (setup-plugin :nvim-ts-autotag))
+
  (fn do-configuration []
    (setup-vim-opts)
    (ucmd "DzColorscheme" (fn [] (pick-colorscheme)) {:nargs 0})
@@ -825,15 +853,22 @@
    (setup-tidy)
    (setup-snacks)
    (setup-conform)
+   (setup-autotag)
    (add-colorschemes)
-   (set-colorscheme :fluoromachine)
+   (set-colorscheme :monet)
    (setup-ibl)
    (vim.api.nvim_clear_autocmds {:group :gitsigns :event [:ColorScheme]})
    (aucmd :ColorScheme {:callback on-colorscheme})
-   (aucmd :BufLeave {:pattern "*.org" :callback #(vim.cmd "set list")})
-   (aucmd :BufEnter {:pattern "*.org" :callback #(vim.cmd "set nolist")})
-   (aucmd :BufLeave {:pattern "*.org" :callback #(snacks.indent.enable)})
-   (aucmd :BufEnter {:pattern "*.org" :callback #(snacks.indent.disable)})
+   (aucmd :BufEnter
+     {:pattern "*" :callback #(buf-enter)})
+   (aucmd :BufLeave
+     {:pattern "*.org" :callback #(vim.cmd "set list")})
+   (aucmd :BufEnter
+     {:pattern "*.org" :callback #(vim.cmd "set nolist")})
+   (aucmd :BufLeave
+     {:pattern "*.org" :callback #(snacks.indent.enable)})
+   (aucmd :BufEnter
+     {:pattern "*.org" :callback #(snacks.indent.disable)})
    (->> {:group (vim.api.nvim_create_augroup :LastPlace {:clear true})
          :pattern ["*"]
          :callback #(let [mark (vim.api.nvim_buf_get_mark 0 "\"")

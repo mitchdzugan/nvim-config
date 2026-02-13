@@ -65,12 +65,15 @@
       cmp-cmdline
       cmp-vsnip
       nvim-cmp
+      vim-vsnip
+      vim-vsnip-integ
 
       nvim-treesitter.withAllGrammars
       snacks-nvim
       nvim-paredit
       conform-nvim
       indent-blankline-nvim
+      nvim-ts-autotag
 
       gitsigns-nvim
       nvim-navic
