@@ -73,7 +73,7 @@
   (fn h-tick [h] (h-add h (/ 1 11)))
 
   (fn h-untick [h] (h-add h (/ 10 11))) ; (loc h-by-norm11-name {})
-  (local h-by-norm11-name 
+  (local h-by-norm11-name
        (let [res {} ]
 	 (var h h-n11-red)
         (each [_ name (ipairs n11-names)]
@@ -439,6 +439,7 @@
     (set vim.g.maplocalleader "\\")
     (comment) ; bg textures
     (vim.cmd "set list lcs=trail:·,tab:🮙🮙,lead:🮙")
+    ; (vim.cmd "set list lcs=trail:·,tab:··,lead:·")
     (comment) ; copy/paste
     (vim.cmd "set clipboard+=unnamedplus")
     (comment) ; make status bar less annoying. not sure if good
@@ -845,7 +846,7 @@
 
   (fn read-colorscheme []
     (let [(succ? scheme) (pcall try-read-colorscheme)]
-      (if succ? scheme :fluoromachine)))
+      (if succ? scheme :monet)))
 
   (fn do-configuration []
     (setup-vim-opts)

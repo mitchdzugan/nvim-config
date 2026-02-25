@@ -1,6 +1,6 @@
-(import-macros _ :__)
+(import-macros __ :__)
 
-(_.module
+(__.module
  (import | :utils)
  (import LuaColor :lua-color)
  (loc HueClass (_.class :Hue))
@@ -102,9 +102,9 @@
 
  (fn h-tick [h] (h-add h (/ 1 11)))
 
- (fn h-untick [h] (h-add h (/ 10 11))) ; (_.L h-by-norm11-name {})
+ (fn h-untick [h] (h-add h (/ 10 11))) 
  (loc h-by-norm11-name (let [res {}]
-                         (accumulate [h h-n11-red __ name (ipairs n11-names)]
+                         (accumulate [h h-n11-red _ name (ipairs n11-names)]
                            (do
                              (tset res name h)
                              (h-tick h)))
@@ -185,7 +185,7 @@
    (fn c-dist [name]
      (h-dist (_h c) (. h-by-norm11-name name)))
 
-   (-> (accumulate [min nil __ name (ipairs n11-names)]
+   (-> (accumulate [min nil _ name (ipairs n11-names)]
          (if (_.nil? min)
              {: name :dist (c-dist name)}
              (let [dist (c-dist name)]
