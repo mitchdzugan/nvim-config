@@ -1,4 +1,5 @@
-(import-macros _ :__)
+(local _ (require :__))
+(import-macros __ :__)
 
 (local ENV #(os.getenv (.. :DZ_NVIM_CONFIG_ $1)))
 
@@ -11,7 +12,7 @@
   (when (not initialized?)
     (set initialized? true))
   (_.reload-modules!)
-  (let [fennel (_.|| (require :fennel) :install)]
+  (let [fennel (__.|| (require :fennel) :install)]
     (set fennel.path (ENV :FENNEL_PATH))
     (set fennel.macro-path (ENV :MACRO_PATH))
     (set package.path (.. (ENV :LUA_PATH_EXTRA) package.path))
