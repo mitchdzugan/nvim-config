@@ -853,8 +853,8 @@
     (ucmd "DzColorscheme" (fn [] (pick-colorscheme)) {:nargs 0})
     (ucmd "DzReload"
           (fn [...]
-            (comment (_.reload-modules!))
-            (__.|| (require :nvim-config) :doTheThings)) {:nargs 0})
+            (comment (_.reload-modules!)
+            (__.|| (require :nvim-config) :doTheThings))) {:nargs 0})
     (setup-treesitter)
     (setup-lsp)
     (setup-gitsigns)
