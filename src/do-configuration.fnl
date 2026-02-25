@@ -7,7 +7,6 @@
  (import Color :lua-color)
  (import snacks)
  (import paredit :nvim-paredit)
- (|.dbg NColor)
 
  (fn setup-plugin [require-path ...]
    ((. (require require-path) :setup) ...))
@@ -396,7 +395,6 @@
 
  (fn sorted-colorschemes []
    (let [res (icollect [name (pairs colorschemes)] name)]
-     (|.dbg res)
      (table.sort res)
      res))
 
@@ -834,6 +832,14 @@
  (fn setup-autotag []
    (setup-plugin :nvim-ts-autotag))
 
+ (fn try-read-colorscheme []
+   (with-open [f (io.open (.. (os.getenv :HOME) "/.config/dz-theme/vim"))]
+     (f:read "*all")))
+
+ (fn read-colorscheme []
+   (let [(succ? scheme) (pcall try-read-colorscheme)]
+     (if succ? scheme :fluoromachine)))
+
  (fn do-configuration []
    (setup-vim-opts)
    (ucmd "DzColorscheme" (fn [] (pick-colorscheme)) {:nargs 0})
@@ -855,7 +861,7 @@
    (setup-conform)
    (setup-autotag)
    (add-colorschemes)
-   (set-colorscheme :monet)
+   (set-colorscheme (read-colorscheme))
    (setup-ibl)
    (vim.api.nvim_clear_autocmds {:group :gitsigns :event [:ColorScheme]})
    (aucmd :ColorScheme {:callback on-colorscheme})
