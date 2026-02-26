@@ -2,7 +2,7 @@
   name = "nvim-config";
   version = "0.0.1-0";
   mkLuaDeps = env: [
-    (env.lua-__.mkPkg env.pkgs)
+    (env.__.mkPkg env.pkgs)
     env.luaPackages.lua-colors
     env.luaPackages.rapidjson
   ];
@@ -20,7 +20,7 @@
       };
       ofLuaPkg = p: env.neovimUtils.buildNeovimPlugin { luaAttr = p; };
     in with env.vimPlugins; [
-      (ofLuaPkg (env.lua-__.mkPkg env.pkgs))
+      (ofLuaPkg (env.__.mkPkg env.pkgs))
       (ofLuaPkg env.luaPackages.lua-colors)
       (ofLuaPkg env.luaPackages.rapidjson)
       (ofLuaPkg env.luaPackages.fennel)

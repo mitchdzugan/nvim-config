@@ -396,8 +396,9 @@
     (on-colorscheme))
 
   (fn set-colorscheme [name ...]
-    (when (. colorschemes name)
-      (_set-colorscheme name)))
+    (if (. colorschemes name)
+      (_set-colorscheme name)
+      (_set-colorscheme :melange-light)))
 
   (fn sorted-colorschemes []
     (let [res (icollect [name (pairs colorschemes)] name)]
@@ -846,7 +847,7 @@
 
   (fn read-colorscheme []
     (let [(succ? scheme) (pcall try-read-colorscheme)]
-      (if succ? scheme :monet)))
+      scheme))
 
   (fn do-configuration []
     (setup-vim-opts)
