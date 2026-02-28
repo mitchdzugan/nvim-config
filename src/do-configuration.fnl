@@ -839,8 +839,7 @@
    (setup-plugin :nvim-ts-autotag))
 
  (fn try-read-colorscheme []
-   (local fname (.. (os.getenv :HOME) "/.config/dz-theme/vim"))
-   (with-open [f (io.open fname)]
+   (with-open [f (io.popen "dz-theme -:v")]
      (_.str.trim (f:read "*all"))))
 
  (fn read-colorscheme []
