@@ -284,7 +284,8 @@
         (add-colorscheme :oldworld))
    (->> (fn []
           (setup-plugin :tokyodark)
-          (vim.cmd.colorscheme :tokyodark))
+          (vim.cmd.colorscheme :tokyodark)
+          (hl :TabLineSel {:link :Normal}))
         (add-colorscheme :tokyodark))
    (->> (fn []
           (setup-plugin :fluoromachine
@@ -802,6 +803,7 @@
    (conform.setup {:format_on_save true
                    :formatters_by_ft {:javascript [:prettier]
                                       :javascriptreact [:prettier]
+                                      :graphql [:prettier]
                                       :fennel [:fnlfmt]}}))
 
  (import hooks :ibl.hooks)
