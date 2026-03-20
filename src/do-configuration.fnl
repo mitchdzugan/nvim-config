@@ -552,8 +552,9 @@
          ":lua require(\"snacks\").terminal(\"fish\", {env={DZ_FISH_SKIP_FASTFETCH=\"yes\"}})<CR>")
    (kset "n" "<sc-s>" ":w<CR>")
    (kset "v" "<sc-c>" "\"+y")
-   (kset "n" "<sc-v>" "\"+P")
-   (kset "v" "<sc-v>" "\"+P")
+   (kset "c" "<sc-v>" "<C-R>+")
+   (kset "n" "<sc-v>" "\"+p")
+   (kset "v" "<sc-v>" "\"+p")
    (kset "c" "<sc-v>" "<C-R>+")
    (kset "i" "<sc-v>" "<C-R>+"))
 
@@ -802,7 +803,9 @@
  (fn setup-conform []
    (conform.setup {:format_on_save true
                    :formatters_by_ft {:javascript [:prettier]
+                                      :typescript [:prettier]
                                       :javascriptreact [:prettier]
+                                      :typescriptreact [:prettier]
                                       :graphql [:prettier]
                                       :fennel [:fnlfmt]}}))
 
