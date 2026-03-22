@@ -83,6 +83,7 @@
       lualine-nvim
       nvim-autopairs
       orgmode
+      vim-hy
 
       (fromGitHub
         "mcauley-penney/tidy.nvim"

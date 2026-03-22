@@ -807,6 +807,7 @@
                                       :javascriptreact [:prettier]
                                       :typescriptreact [:prettier]
                                       :graphql [:prettier]
+                                      :hy [:zprint]
                                       :fennel [:fnlfmt]}}))
 
  (import hooks :ibl.hooks)
