@@ -807,6 +807,7 @@
                                       :javascriptreact [:prettier]
                                       :typescriptreact [:prettier]
                                       :graphql [:prettier]
+                                      :clojure [:zprint]
                                       :hy [:zprint]
                                       :fennel [:fnlfmt]}}))
 
