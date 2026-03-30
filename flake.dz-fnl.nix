@@ -23,7 +23,7 @@
       (ofLuaPkg (env.__.mkPkg env.pkgs))
       (ofLuaPkg env.luaPackages.lua-colors)
       (ofLuaPkg env.luaPackages.rapidjson)
-      (ofLuaPkg env.luaPackages.fennel)
+      # (ofLuaPkg env.luaPackages.fennel)
 
       aurora
       aylin-vim
