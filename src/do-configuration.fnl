@@ -275,6 +275,14 @@
           (hl :ColorColumn {:bg (tostring (Color {:h 0.8 :s 0.3 :v 0.25}))}))
         (add-colorscheme :aylin))
    (->> (fn []
+          (set vim.o.background :light)
+          (vim.cmd.colorscheme :oxocarbon))
+        (add-colorscheme :oxocarbon-light))
+   (->> (fn []
+          (set vim.o.background :dark)
+          (vim.cmd.colorscheme :oxocarbon))
+        (add-colorscheme :oxocarbon-dark))
+   (->> (fn []
           (set vim.o.background :dark)
           (setup-plugin :monet {})
           (vim.cmd.colorscheme :monet))
