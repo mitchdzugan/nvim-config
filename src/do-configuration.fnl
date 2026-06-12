@@ -518,6 +518,8 @@
    (|.ksetm "<A-7>" "7gt")
    (|.ksetm "<A-8>" "8gt")
    (|.ksetm "<A-->" ":b#<CR>")
+   (|.ksetm "<A-/>" ":lua vim.lsp.buf.hover()<CR>")
+   (|.ksetm "<A-?>" ":lua vim.diagnostic.open_float()<CR>")
    (|.ksetm "<A-r>" ":DzReload<CR>")
    (|.ksetm "<A-l>" #(launch-best-repl))
    (|.ksetm "<A-b>" #(snacks.picker.buffers))
