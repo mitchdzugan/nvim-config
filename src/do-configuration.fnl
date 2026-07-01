@@ -793,6 +793,7 @@
                 :single_file_support true
                 :autostart true
                 :capabilities {:offsetEncoding [:utf-8 :utf-16]}})
+   (lsp-enable :denols)
    (lsp-enable :ts_ls)
    (lsp-enable :lua_ls {:cmd [:lua-language-server]
                         :filetypes [:lua]
