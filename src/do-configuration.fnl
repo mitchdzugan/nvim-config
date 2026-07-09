@@ -517,6 +517,8 @@
    (|.ksetm "<A-6>" "6gt")
    (|.ksetm "<A-7>" "7gt")
    (|.ksetm "<A-8>" "8gt")
+   (|.ksetm "<A-Left>" "tabp")
+   (|.ksetm "<A-Right>" "tabn")
    (|.ksetm "<A-->" ":b#<CR>")
    (|.ksetm "<A-/>" ":lua vim.lsp.buf.hover()<CR>")
    (|.ksetm "<A-?>" ":lua vim.diagnostic.open_float()<CR>")
@@ -528,10 +530,9 @@
    (|.ksetm "<A-a>" #(snacks.picker.lines))
    (|.ksetm "<A-c>" #(snacks.picker.grep_word))
    (|.ksetm "<A-e>" #(snacks.picker.diagnostics_buffer))
+   (|.ksetm "<C-/>" #(snacks.explorer.reveal))
    (|.ksetm "<CA-Left>" #(paredit.api.drag_element_backwards))
-   (|.ksetm "<CA-Right>" #(paredit.api.drag_element_forwards))
-   (|.ksetm "<A-Left>" #(paredit.api.drag_form_backwards))
-   (|.ksetm "<A-Right>" #(paredit.api.drag_form_forwards))
+   (|.ksetm "<CA-Right>" #(paredit.api.drag_element_forwards)) ; (|.ksetm "<A-Left>" #(paredit.api.drag_form_backwards)) ; (|.ksetm "<A-Right>" #(paredit.api.drag_form_forwards))
    (|.ksetm "<C-Left>"
             #(|.til-moved!! #(paredit.api.move_to_prev_element_head)
                             #(do
@@ -680,7 +681,7 @@
                                  :padding 0
                                  :ttl (* 5 60)
                                  :indent 0}]}
-         :explorer {:enabled true}
+         :explorer {:enabled true :auto_close true}
          :indent {:enabled true
                   :indent {:enabled false
                            :only_scope true
@@ -724,7 +725,7 @@
                                :SnacksIndent6
                                :SnacksIndent7]}}
          :input {:enabled true}
-         :picker {:enabled true}
+         :picker {:enabled true :sources {:explorer {:auto_close true}}}
          :notifier {:enabled true}
          :quickfile {:enabled true}
          :scope {:enabled true :treesitter {:enabled true}}
@@ -794,7 +795,7 @@
                 :autostart true
                 :capabilities {:offsetEncoding [:utf-8 :utf-16]}})
    (lsp-enable :denols)
-   (lsp-enable :ts_ls)
+   (lsp-enable :vtsls)
    (lsp-enable :lua_ls {:cmd [:lua-language-server]
                         :filetypes [:lua]
                         :autostart true
